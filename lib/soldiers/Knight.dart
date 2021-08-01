@@ -5,15 +5,22 @@ class Knight extends ISoldier{
     this.imagePath="${Knight}_$color";
     this.position=position;
     this.id=id;
-  }
-  @override
-  void attack() {
-    // TODO: implement attack
+    this.color = color;
+
   }
 
   @override
-  void move() {
+  bool move({required int currentIndex, required int newIndex}) {
     // TODO: implement move
+    throw UnimplementedError();
   }
+
+  @override
+  bool attack({required ISoldier attackedSoldier}) {
+    // TODO: implement attack
+    throw UnimplementedError();
+  }
+
+
 
 }

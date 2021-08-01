@@ -5,15 +5,22 @@ class Queen extends ISoldier{
     this.imagePath="${Queen}_$color";
     this.position=position;
     this.id=id;
+    this.color = color;
   }
+
+
+
   @override
-  void attack() {
-    // TODO: implement attack
+  bool move({required int currentIndex, required int newIndex}) {
+    // TODO: implement move
+    throw UnimplementedError();
   }
 
   @override
-  void move() {
-    // TODO: implement move
+  bool attack({required ISoldier attackedSoldier}) {
+    // TODO: implement attack
+    throw UnimplementedError();
   }
+ 
 
 }

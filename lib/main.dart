@@ -1,5 +1,7 @@
-import 'package:chess_game_flutter/Army.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'controllers/game_controller.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,7 +11,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Chess Game',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -19,113 +21,130 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
+  final controller = Get.put(GameController());
 
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  Army whiteArmy= Army("w");
-  Army blackArmy= Army("b");
-  late Army currentArmy;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    currentArmy = whiteArmy;
-    super.initState();
+  Color getBoxColor({required int index, required bool isSelected}) {
+    bool isRowEven = (index / 8).floor() % 2 == 0;
+    bool isIndexEven = index % 2 == 0;
+    if (isSelected == true) {
+      return Colors.red;
+    } else if (isRowEven == true) {
+      if (isIndexEven == true) {
+        return Colors.white;
+      } else if (isIndexEven == false) {
+        return Colors.orangeAccent;
+      }
+    } else {
+      if (isIndexEven == true) {
+        return Colors.orangeAccent;
+      } else if (isIndexEven == false) {
+        return Colors.white;
+      }
+    }
+    return Colors.transparent;
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
+      body: GetBuilder<GameController>(builder: (gameController) {
+        return Container(
+            child: Column(
+          children: [
+            Expanded(
+              child: GridView.builder(
+                  itemCount: 64,
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 8),
+                  itemBuilder: (context, index) {
+                    Color _color = getBoxColor(
+                        index: index,
+                        isSelected:
+                            gameController.currentArmy.currentSelection !=
+                                    null &&
+                                gameController.currentArmy.currentSelection!
+                                        .position ==
+                                    index);
+                    for (var item in gameController.whiteArmy.allSoldiers)
+                      if (item.position == index)
+                        return _buildCell(
+                            onPressed: () {
+                              gameController.setCurrentSelection(item);
+                            },
+                            item: item,
+                            index: index,
+                            color: _color);
 
-      body: Stack(
+                    for (var item in gameController.blackArmy.allSoldiers)
+                      if (item.position == index)
+                        return _buildCell(
+                            onPressed: () {
+                              gameController.setCurrentSelection(item);
+                            },
+                            item: item,
+                            index: index,
+                            color: _color);
 
-        alignment: Alignment.center,
-        children: [
-          Container(
-            alignment: Alignment.center,
-            child: GridView.builder(
-              itemCount: 64,
-              shrinkWrap: true,
-
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
-              itemBuilder: (context,index){
-                int isEven= (index/8).floor();
-                print(isEven);
-                if(isEven%2==0)
-                  if(currentArmy.currentSelection==null)
-                    return Container(
-                      color:index%2==0?Colors.white: Colors.orangeAccent,
-                    );
-                  else
-                    return Container(
-                      color:currentArmy.currentSelection!.position==index?Colors.redAccent:index%2==0?Colors.white: Colors.orangeAccent,
-                    );
-                else
-                if(currentArmy.currentSelection==null)
-                  return Container(
-                    color:index%2==0?Colors.orangeAccent: Colors.white,
-                  );
-                else
-                  return Container(
-                    color:currentArmy.currentSelection!.position==index?Colors.redAccent:index%2==0?Colors.orangeAccent: Colors.white,
-                  );
-
-              },),
-          ),
-          Container(
-            alignment: Alignment.center,
-            child: GridView.builder(
-              itemCount: 64,
-              shrinkWrap: true,
-
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
-
-              itemBuilder: (context,index){
-                for(var item in whiteArmy.allSoldiers)
-                  if(item.position==index)
-                    return GestureDetector(
-                        onTap: () {
-                          currentArmy.currentSelection=item;
-                          setState(() {
-
-                          });
+                    return _buildCell(
+                        onPressed: () {
+                          gameController.moveToEmptyCell(index);
+                          // setState(() {
+                          //   if (gameController.currentArmy.currentSelection !=
+                          //       null) {
+                          //     gameController
+                          //         .currentArmy.currentSelection!.position = index;
+                          //   }
+                          // });
                         },
-                        child: Container(child: Image.asset("assets/"+item.imagePath+".png"),
-                        ));
+                        item: null,
+                        index: index,
+                        color: _color);
+                  }),
+            ),
+            Container(
+                padding: EdgeInsets.symmetric(vertical: 30.0),
+                child: Text("player: ${gameController.currentArmy.color}")),
+            InkWell(
+              onTap: () => gameController.clear(),
+              child: Container(
+                  color: Colors.amber,
+                  padding:
+                      EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                  child: Text("Clear")),
+            ),
+            SizedBox(
+              height: 20.0,
+            )
+          ],
+        ));
+      }),
+    );
+  }
 
-                for(var item in blackArmy.allSoldiers)
-                  if(item.position==index)
-                    return GestureDetector(
-                        onTap: () {
-                          currentArmy.currentSelection=item;
-                          setState(() {
-
-                          });
-                        },
-                        child: Container(child: Image.asset("assets/"+item.imagePath+".png"),
-                        ));
-
-                return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if(currentArmy.currentSelection!=null){
-                          currentArmy.currentSelection!.position=index;
-                        }
-
-                      });
-                    },
-                    child: Container(color: Colors.transparent,));
-              },),
-          ),
-
-        ],
-      ),
+  _buildCell(
+      {required var item,
+      required Function() onPressed,
+      required int index,
+      required Color color}) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+          color: color,
+          child: Column(
+            children: [
+              Text("$index"),
+              item != null && item.position == index
+                  ? Image.asset(
+                      "assets/" + item.imagePath + ".png",
+                      height: 33.0,
+                    )
+                  : Container(
+                      color: Colors.transparent,
+                    ),
+            ],
+          )),
     );
   }
 }

@@ -1,0 +1,19 @@
+import 'I_slodier.dart';
+
+class King extends ISoldier{
+  King({required int position,required String color,required int id}){
+    this.imagePath="${King}_$color";
+    this.position=position;
+    this.id=id;
+  }
+  @override
+  void attack() {
+    // TODO: implement attack
+  }
+
+  @override
+  void move() {
+    // TODO: implement move
+  }
+
+}

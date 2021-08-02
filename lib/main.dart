@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Chess Game',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -33,11 +34,11 @@ class MyHomePage extends StatelessWidget {
       if (isIndexEven == true) {
         return Colors.white;
       } else if (isIndexEven == false) {
-        return Colors.orangeAccent;
+        return Colors.brown.shade100;
       }
     } else {
       if (isIndexEven == true) {
-        return Colors.orangeAccent;
+        return Colors.brown.shade100;
       } else if (isIndexEven == false) {
         return Colors.white;
       }
@@ -105,7 +106,16 @@ class MyHomePage extends StatelessWidget {
             ),
             Container(
                 padding: EdgeInsets.symmetric(vertical: 30.0),
-                child: Text("player: ${gameController.currentArmy.color}")),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("player: "),
+                    Text(
+                      "${gameController.currentArmy.color.capitalize}",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    )
+                  ],
+                )),
             InkWell(
               onTap: () => gameController.clear(),
               child: Container(

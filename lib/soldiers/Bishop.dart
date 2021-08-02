@@ -1,3 +1,5 @@
+import 'package:chess_game_flutter/Army.dart';
+
 import 'I_slodier.dart';
 
 class Bishop extends ISoldier {
@@ -17,6 +19,12 @@ class Bishop extends ISoldier {
   @override
   bool attack({required ISoldier attackedSoldier}) {
     // TODO: implement attack
+    throw UnimplementedError();
+  }
+
+  @override
+  List<int> checkPath({ required Army whiteArmy, required Army blackArmy}) {
+    // TODO: implement checkPath
     throw UnimplementedError();
   }
 

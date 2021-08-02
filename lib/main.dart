@@ -8,7 +8,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -25,27 +24,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   final controller = Get.put(GameController());
 
-  Color getBoxColor({required int index, required bool isSelected}) {
-    bool isRowEven = (index / 8).floor() % 2 == 0;
-    bool isIndexEven = index % 2 == 0;
-    if (isSelected == true) {
-      return Colors.red;
-    } else if (isRowEven == true) {
-      if (isIndexEven == true) {
-        return Colors.white;
-      } else if (isIndexEven == false) {
-        return Colors.brown.shade100;
-      }
-    } else {
-      if (isIndexEven == true) {
-        return Colors.brown.shade100;
-      } else if (isIndexEven == false) {
-        return Colors.white;
-      }
-    }
-    return Colors.transparent;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +38,7 @@ class MyHomePage extends StatelessWidget {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 8),
                   itemBuilder: (context, index) {
-                    Color _color = getBoxColor(
+                    Color _color = gameController.getBoxColor(
                         index: index,
                         isSelected:
                             gameController.currentArmy.currentSelection !=

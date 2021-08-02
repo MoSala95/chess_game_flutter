@@ -1,5 +1,9 @@
 import 'package:chess_game_flutter/Army.dart';
 import 'package:chess_game_flutter/soldiers/I_slodier.dart';
+import 'package:chess_game_flutter/soldiers/King.dart';
+import 'package:chess_game_flutter/soldiers/Knight.dart';
+import 'package:chess_game_flutter/soldiers/Pawn.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class GameController extends GetxController {
@@ -7,18 +11,12 @@ class GameController extends GetxController {
   Army blackArmy = Army("b");
   late Army currentArmy = whiteArmy;
   late Army lastArmy = blackArmy;
+  List<int> availablePathes = [];
 
   setCurrentSelection(ISoldier newItem) {
     print("-----------setCurrentSelection");
     int newIndex = newItem.position;
     // currentArmy = newItem.color == "w" ? whiteArmy : blackArmy;
-    // int? _indexFoundInWightArmy = whiteArmy.allSoldiers
-    //     .indexWhere((ISoldier solider) => solider.position == newIndex);
-    // int? _indexFoundInBlackArmy = blackArmy.allSoldiers
-    //     .indexWhere((ISoldier solider) => solider.position == newIndex);
-
-    // if (_indexFoundInWightArmy == -1 && _indexFoundInBlackArmy == -1) {
-    // }
 
     if (newItem.color == lastArmy.color &&
         currentArmy.currentSelection == null) {
@@ -63,33 +61,42 @@ class GameController extends GetxController {
     }
   }
 
-  // _updateCurrentSelection(newItem) {
-  //   print("-----_updateCurrentSelection");
-  //   print(
-  //       "lastArmy: ${lastArmy.color} - currentArmy: ${currentArmy.color} - newItem color: ${newItem.color}");
-  //   if (lastArmy.color != currentArmy.color) {
-  //     currentArmy.currentSelection = newItem;
-  //     // lastArmy = currentArmy.color == "w" ? blackArmy : whiteArmy;
-  //     update();
-  //   } else {
-  //     Get.snackbar('Error', 'switch player');
-  //   }
-  // }
-
   moveToEmptyCell(int newIndex) {
-    print("----------moveToEmptyCell");
+    print("----------moveToEmptyCell move to => $newIndex");
 
     if (currentArmy.currentSelection != null) {
-      bool canMove = currentArmy.currentSelection!.move(
-          currentIndex: currentArmy.currentSelection!.position,
-          newIndex: newIndex);
-
-      if (canMove == true) {
-        currentArmy.currentSelection!.position = newIndex;
-        currentArmy.currentSelection = null;
-        replaceCurrentArmy();
-
+      if (currentArmy.currentSelection is King ||
+          currentArmy.currentSelection is Knight ||
+          currentArmy.currentSelection is Pawn) {
+        availablePathes = currentArmy.currentSelection!
+            .checkPath(whiteArmy: whiteArmy, blackArmy: blackArmy);
         update();
+        Future.delayed(Duration(milliseconds: 100), () {
+          if (availablePathes
+                  .where((element) => element == newIndex)
+                  .toList()
+                  .length >
+              0) {
+            currentArmy.currentSelection!.position = newIndex;
+            currentArmy.currentSelection = null;
+            availablePathes = [];
+            replaceCurrentArmy();
+
+            update();
+          }
+        });
+      } else {
+        bool canMove = currentArmy.currentSelection!.move(
+            currentIndex: currentArmy.currentSelection!.position,
+            newIndex: newIndex);
+
+        if (canMove == true) {
+          currentArmy.currentSelection!.position = newIndex;
+          currentArmy.currentSelection = null;
+          replaceCurrentArmy();
+
+          update();
+        }
       }
     }
   }
@@ -112,6 +119,31 @@ class GameController extends GetxController {
     blackArmy = Army("b");
     currentArmy = whiteArmy;
     lastArmy = blackArmy;
+    availablePathes = [];
     update();
+  }
+
+  Color getBoxColor({required int index, required bool isSelected}) {
+    bool isRowEven = (index / 8).floor() % 2 == 0;
+    bool isIndexEven = index % 2 == 0;
+    if (isSelected == true) {
+      return Colors.amber;
+    } else if (availablePathes.length > 0 &&
+        availablePathes.where((path) => path == index).toList().length > 0) {
+      return Colors.lightBlue;
+    } else if (isRowEven == true) {
+      if (isIndexEven == true) {
+        return Colors.white;
+      } else if (isIndexEven == false) {
+        return Colors.brown.shade100;
+      }
+    } else {
+      if (isIndexEven == true) {
+        return Colors.brown.shade100;
+      } else if (isIndexEven == false) {
+        return Colors.white;
+      }
+    }
+    return Colors.transparent;
   }
 }

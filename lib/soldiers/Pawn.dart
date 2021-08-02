@@ -1,3 +1,5 @@
+import 'package:chess_game_flutter/Army.dart';
+
 import 'I_slodier.dart';
 
 class Pawn extends ISoldier {
@@ -42,5 +44,40 @@ class Pawn extends ISoldier {
       return true;
     }
     return false;
+  }
+
+  @override
+  List<int> checkPath({required Army whiteArmy, required Army blackArmy}) {
+    List<int> availableIndexes = [];
+    List<int> supposedIndexes = [];
+    if (color == "w") {
+      supposedIndexes = [
+        (position - 8),
+      ];
+      if (isFirst == true) {
+        supposedIndexes.add(position - 16);
+        this.isFirst = false;
+      }
+    } else {
+      supposedIndexes = [
+        (position + 8),
+      ];
+      if (isFirst == true) {
+        supposedIndexes.add(position + 16);
+        this.isFirst = false;
+      }
+    }
+    
+    for (var i = 0; i < supposedIndexes.length; i++) {
+      int? _indexFoundInWightArmy = whiteArmy.allSoldiers.indexWhere(
+          (ISoldier solider) => solider.position == supposedIndexes[i]);
+      int? _indexFoundInBlackArmy = blackArmy.allSoldiers.indexWhere(
+          (ISoldier solider) => solider.position == supposedIndexes[i]);
+      if ((_indexFoundInWightArmy == -1 && _indexFoundInBlackArmy == -1) ||
+          (color == "w" && _indexFoundInBlackArmy > -1)) {
+        availableIndexes.add(supposedIndexes[i]);
+      }
+    }
+    return availableIndexes;
   }
 }

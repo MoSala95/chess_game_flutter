@@ -1,3 +1,5 @@
+import 'package:chess_game_flutter/Army.dart';
+
 import 'I_slodier.dart';
 
 class Rook extends ISoldier {
@@ -8,7 +10,6 @@ class Rook extends ISoldier {
     this.color = color;
   }
 
- 
   @override
   bool move({required int currentIndex, required int newIndex}) {
     // TODO: implement move
@@ -21,5 +22,9 @@ class Rook extends ISoldier {
     throw UnimplementedError();
   }
 
-
+  @override
+  List<int> checkPath({required Army whiteArmy, required Army blackArmy}) {
+    // TODO: implement checkPath
+    throw UnimplementedError();
+  }
 }

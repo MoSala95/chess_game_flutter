@@ -162,8 +162,6 @@ class Rook extends ISoldier{
 
 
       }
-
-
       if (upRows > 0) {
         for (int i = 1; i <= upRows ; i++) {
           print("Rock vertical up ${this.position + (8 * i) }");
@@ -179,6 +177,7 @@ class Rook extends ISoldier{
         }
       }
     }
+    this.possiblePaths=possibleMoves;
     return possibleMoves;
   }
 

@@ -23,7 +23,16 @@ class Bishop extends ISoldier{
    List<int>possibleMoves=[];
    int upRows=0;
    int downRows=0;
+   int rightCells=0;
+   int leftCells=0;
    int currentRow=(this.position/8).floor();
+   if(this.position<8){
+     rightCells=7-this.position;
+     leftCells=this.position;
+   }else{
+     rightCells=7-this.position%8;
+     leftCells=this.position%8;
+   }
    upRows=7-currentRow;
    downRows=currentRow;
    List<int> whiteArmyPosition=[];
@@ -34,9 +43,11 @@ class Bishop extends ISoldier{
 
    print("current position $position current row $currentRow up row count $upRows ,, down rows $downRows");
    if(color=="w") {
-     if (downRows > 0) {
+     if (downRows > 0&&rightCells>0)
        for (int i = 1; i <= downRows ; i++) {
-         print("bishop down rows loop ${this.position - (8 * i) + i}");
+         if(i>rightCells)
+           break;
+         print("bishop down right   ${this.position - (8 * i) + i}");
          if (!whiteArmyPosition.contains(this.position - (8 * i) + i))
            if (!blackArmyPosition.contains(this.position - (8 * i) + i))
              possibleMoves.add(this.position - (8 * i) + i,);
@@ -50,8 +61,11 @@ class Bishop extends ISoldier{
          }
 
        }
+     if (downRows > 0&&leftCells>0)
        for (int i = 1; i <= downRows ; i++) {
-         print("bishop down rows loop ${this.position - (8 * i) - i}");
+         if(i>leftCells)
+           break;
+         print("bishop down left  ${this.position - (8 * i) - i}");
          if (!whiteArmyPosition.contains(this.position - (8 * i) - i))
            if (!blackArmyPosition.contains(this.position - (8 * i) - i))
              possibleMoves.add(this.position - (8 * i) - i,);
@@ -63,13 +77,12 @@ class Bishop extends ISoldier{
            print("break white loop");
            break;
          }
-
        }
-     }
 
-
-     if (upRows > 0) {
+     if  (upRows > 0&&rightCells>0)
        for (int i = 1; i <= upRows ; i++) {
+         if(i>rightCells)
+           break;
          print("bishop up rows loop ${this.position + (8 * i) + i}");
 
          if (!whiteArmyPosition.contains(this.position + (8 * i) + i))
@@ -82,7 +95,10 @@ class Bishop extends ISoldier{
          else
            break;
        }
+     if  (upRows > 0&&leftCells>0)
        for (int i = 1; i <= upRows ; i++) {
+         if(i>leftCells)
+           break;
          print("bishop up rows loop ${this.position + (8 * i) - i}");
          if (!whiteArmyPosition.contains(this.position + (8 * i) - i))
            if (!blackArmyPosition.contains(this.position + (8 * i) - i))
@@ -94,11 +110,15 @@ class Bishop extends ISoldier{
          else
            break;
        }
-     }
-   }else{
-     if (downRows > 0) {
+
+   }
+
+   else{
+     if (downRows > 0&&rightCells>0)
        for (int i = 1; i <= downRows ; i++) {
-         print("bishop down rows loop ${this.position - (8 * i) + i}");
+         if(i>rightCells)
+           break;
+         print("bishop down right   ${this.position - (8 * i) + i}");
          if (!blackArmyPosition.contains(this.position - (8 * i) + i))
            if (!whiteArmyPosition.contains(this.position - (8 * i) + i))
              possibleMoves.add(this.position - (8 * i) + i,);
@@ -106,11 +126,17 @@ class Bishop extends ISoldier{
              possibleMoves.add(this.position - (8 * i) + i,);
              break;
            }
-         else
+         else{
+           print("break white loop");
            break;
+         }
+
        }
+     if (downRows > 0&&leftCells>0)
        for (int i = 1; i <= downRows ; i++) {
-         print("bishop down rows loop ${this.position - (8 * i) - i}");
+         if(i>leftCells)
+           break;
+         print("bishop down left  ${this.position - (8 * i) - i}");
          if (!blackArmyPosition.contains(this.position - (8 * i) - i))
            if (!whiteArmyPosition.contains(this.position - (8 * i) - i))
              possibleMoves.add(this.position - (8 * i) - i,);
@@ -118,15 +144,18 @@ class Bishop extends ISoldier{
              possibleMoves.add(this.position - (8 * i) - i,);
              break;
            }
-         else
+         else{
+           print("break white loop");
            break;
+         }
        }
-     }
 
-
-     if (upRows > 0) {
+     if  (upRows > 0&&rightCells>0)
        for (int i = 1; i <= upRows ; i++) {
+         if(i>rightCells)
+           break;
          print("bishop up rows loop ${this.position + (8 * i) + i}");
+
          if (!blackArmyPosition.contains(this.position + (8 * i) + i))
            if (!whiteArmyPosition.contains(this.position + (8 * i) + i))
              possibleMoves.add(this.position + (8 * i) + i,);
@@ -137,9 +166,11 @@ class Bishop extends ISoldier{
          else
            break;
        }
+     if  (upRows > 0&&leftCells>0)
        for (int i = 1; i <= upRows ; i++) {
-         print("bishop up rows loop ${this.position + (8 * i) - i}");
-
+         if(i>leftCells)
+           break;
+           print("bishop up rows loop ${this.position + (8 * i) - i}");
          if (!blackArmyPosition.contains(this.position + (8 * i) - i))
            if (!whiteArmyPosition.contains(this.position + (8 * i) - i))
              possibleMoves.add(this.position + (8 * i) - i,);
@@ -150,8 +181,8 @@ class Bishop extends ISoldier{
          else
            break;
        }
-     }
    }
+   this.possiblePaths=possibleMoves;
    return possibleMoves;
   }
 

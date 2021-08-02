@@ -57,24 +57,20 @@ class _MyHomePageState extends State<MyHomePage> {
               itemBuilder: (context,index){
                 int isEven= (index/8).floor();
                 print(isEven);
-                if(isEven%2==0)
-                  if(currentArmy.currentSelection==null)
-                    return Container(
-                      color:index%2==0?Colors.white: Colors.orangeAccent,
-                    );
+                if(currentArmy.currentSelection!=null)
+                if(currentArmy.currentSelection!.position==index)
+                  return Container(color:Colors.redAccent,child: Text("$index"),);
+                else if(currentArmy.currentSelection!.possiblePaths.contains(index))
+                  return Container(color: Colors.greenAccent,child: Text("$index"),);
+                  else if(isEven%2==0)
+                    return Container(color:index%2==0?Colors.white: Colors.orangeAccent,child: Text("$index"),);
                   else
-                    return Container(
-                      color:currentArmy.currentSelection!.position==index?Colors.redAccent:index%2==0?Colors.white: Colors.orangeAccent,
-                    );
+                    return Container(color:index%2==0?Colors.orangeAccent: Colors.white,child: Text("$index"),);
                 else
-                if(currentArmy.currentSelection==null)
-                  return Container(
-                    color:index%2==0?Colors.orangeAccent: Colors.white,
-                  );
+                 if(isEven%2==0)
+                  return Container(color:index%2==0?Colors.white: Colors.orangeAccent,child: Text("$index"),);
                 else
-                  return Container(
-                    color:currentArmy.currentSelection!.position==index?Colors.redAccent:index%2==0?Colors.orangeAccent: Colors.white,
-                  );
+                  return Container(color:index%2==0?Colors.orangeAccent: Colors.white,child: Text("$index"),);
 
               },),
           ),
@@ -92,6 +88,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     return GestureDetector(
                         onTap: () {
                           currentArmy.currentSelection=item;
+                          currentArmy.currentSelection!.possiblePaths.clear();
+                          currentArmy.currentSelection!.checkPath(color: currentArmy.color, whiteArmy: whiteArmy, blackArmy: blackArmy);
                           setState(() {
 
                           });
@@ -104,6 +102,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     return GestureDetector(
                         onTap: () {
                           currentArmy.currentSelection=item;
+                          currentArmy.currentSelection!.possiblePaths.clear();
+                          currentArmy.currentSelection!.checkPath(color: currentArmy.color, whiteArmy: whiteArmy, blackArmy: blackArmy);
+
                           setState(() {
 
                           });
@@ -115,8 +116,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     onTap: () {
                       setState(() {
                         if(currentArmy.currentSelection!=null){
-                          if(currentArmy.currentSelection!.checkPath(color: currentArmy.color, whiteArmy: whiteArmy, blackArmy: blackArmy).contains(index))
-                          currentArmy.currentSelection!.position=index;
+                          if(currentArmy.currentSelection!.possiblePaths.contains(index)){
+                            currentArmy.currentSelection!.position=index;
+                            currentArmy.currentSelection!.possiblePaths.clear();
+                            currentArmy.currentSelection!.checkPath(color: currentArmy.color, whiteArmy: whiteArmy, blackArmy: blackArmy);
+                          }
+
                         }
 
                       });

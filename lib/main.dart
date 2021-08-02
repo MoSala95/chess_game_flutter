@@ -96,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                           });
                         },
-                        child: Container(child: Image.asset("assets/"+item.imagePath+".png"),
+                        child: Container(child: Image.asset(item.imagePath),
                         ));
 
                 for(var item in blackArmy.allSoldiers)
@@ -108,13 +108,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
                           });
                         },
-                        child: Container(child: Image.asset("assets/"+item.imagePath+".png"),
+                        child: Container(child: Image.asset(item.imagePath),
                         ));
 
                 return GestureDetector(
                     onTap: () {
                       setState(() {
                         if(currentArmy.currentSelection!=null){
+                          if(currentArmy.currentSelection!.checkPath(color: currentArmy.color, whiteArmy: whiteArmy, blackArmy: blackArmy).contains(index))
                           currentArmy.currentSelection!.position=index;
                         }
 

@@ -43,4 +43,5 @@ class Army{
     allSoldiers.add(queen);
     allSoldiers.add(king);
   }
+
 }

@@ -17,8 +17,9 @@ class Pawn extends ISoldier{
     // TODO: implement move
   }
   @override
-  List<int> checkPath({required String color,required Army whiteArmy, required Army blackArmy}){
+  checkPath({required String color,required Army friend, required Army enemy}){
     List<int> possibleMoves=[];
+    List<int>possibleAttacks=[];
     int upRows=0;
     int downRows=0;
     int rightCells=0;
@@ -35,103 +36,54 @@ class Pawn extends ISoldier{
     print("right and left cells $rightCells ,,, $leftCells ");
     upRows=7-currentRow;
     downRows=currentRow;
-    List<int> whiteArmyPosition=[];
-    List<int> blackArmyPosition=[];
+    List<int> friendArmyPosition=[];
+    List<int> enemyArmyPosition=[];
 
-    whiteArmy.allSoldiers.forEach((element) {whiteArmyPosition.add(element.position); });
-    blackArmy.allSoldiers.forEach((element) {blackArmyPosition.add(element.position); });
+    friend.allSoldiers.forEach((element) {friendArmyPosition.add(element.position); });
+    enemy.allSoldiers.forEach((element) {enemyArmyPosition.add(element.position); });
 
-    if(color =="w"){
-      if (downRows > 0) {
-        for (int i = 1; i <= 1 ; i++) {
-          print("pawn down vertical  ${this.position - (8 * i) }");
-          if (!whiteArmyPosition.contains(this.position - (8 * i) ))
-            if (!blackArmyPosition.contains(this.position - (8 * i) ))
-              possibleMoves.add(this.position - (8 * i) );
-            else {
-              possibleMoves.add(this.position - (8 * i) );
-              break;
-            }
-          else{
-            print("break white loop");
-            break;
-          }
+      if (downRows > 0&&color=="w") {
 
-        }
-        /*for (int i = 1; i <= 1 ; i++) {
-          print("pawn down diagonal right ${this.position - (8 * i) + i}");
-          if (!whiteArmyPosition.contains(this.position - (8 * i) + i))
-            if (!blackArmyPosition.contains(this.position - (8 * i) + i))
-              possibleMoves.add(this.position - (8 * i) + i,);
-            else {
-              possibleMoves.add(this.position - (8 * i) + i,);
-              break;
-            }
-          else{
-            print("break white loop");
-            break;
-          }
+          print("pawn down vertical  ${this.position - 8 }");
+          if (!friendArmyPosition.contains(this.position - 8 ))
+            if (!enemyArmyPosition.contains(this.position - 8 ))
+              possibleMoves.add(this.position - 8 );
 
-        }
-        for (int i = 1; i <= 1 ; i++) {
-          print("pawn down diagonal left ${this.position - (8 * i) - i}");
-          if (!whiteArmyPosition.contains(this.position - (8 * i) - i))
-            if (!blackArmyPosition.contains(this.position - (8 * i) - i))
-              possibleMoves.add(this.position - (8 * i) - i,);
-            else {
-              possibleMoves.add(this.position - (8 * i) - i,);
-              break;
-            }
-          else{
-            print("break white loop");
-            break;
-          }
 
-        }*/
+
+          print("pawn down diagonal right ${this.position - 8 + 1}");
+          if (!friendArmyPosition.contains(this.position - 8 + 1))
+            if (enemyArmyPosition.contains(this.position - 8 + 1))
+              possibleAttacks.add(this.position - 8 + 1,);
+
+
+          print("pawn down diagonal left ${this.position - 8-1}");
+          if (!friendArmyPosition.contains(this.position - 8-1))
+            if (enemyArmyPosition.contains(this.position - 8-1))
+              possibleAttacks.add(this.position - 8-1,);
+
       }
-    }
-    else{
-      if (upRows > 0) {
-        for (int i = 1; i <= 1 ; i++) {
-          print("pawn vertical up ${this.position + (8 * i) }");
-          if (!blackArmyPosition.contains(this.position + (8 * i) ))
-            if (!whiteArmyPosition.contains(this.position + (8 * i) ))
-              possibleMoves.add(this.position + (8 * i) + i,);
-            else {
-              possibleMoves.add(this.position + (8 * i) + i,);
-              break;
-            }
-          else
-            break;
-        }
-       /* for (int i = 1; i <= 1 ; i++) {
-          print("pawn up rows loop ${this.position + (8 * i) + i}");
-          if (!blackArmyPosition.contains(this.position + (8 * i) + i))
-            if (!whiteArmyPosition.contains(this.position + (8 * i) + i))
-              possibleMoves.add(this.position + (8 * i) + i,);
-            else {
-              possibleMoves.add(this.position + (8 * i) + i,);
-              break;
-            }
-          else
-            break;
-        }
-        for (int i = 1; i <= 1 ; i++) {
-          print("pawn up rows loop ${this.position + (8 * i) - i}");
+    if (upRows > 0 && color=="b") {
+      print("pawn up vertical  ${this.position + 8 }");
+      if (!friendArmyPosition.contains(this.position + 8 ))
+        if (!enemyArmyPosition.contains(this.position + 8 ))
+          possibleMoves.add(this.position + 8 );
 
-          if (!blackArmyPosition.contains(this.position + (8 * i) - i))
-            if (!whiteArmyPosition.contains(this.position + (8 * i) - i))
-              possibleMoves.add(this.position + (8 * i) - i,);
-            else {
-              possibleMoves.add(this.position + (8 * i) - i,);
-              break;
-            }
-          else
-            break;
-        }*/
-      }
+      print("pawn up diagonal right ${this.position + 8 + 1}");
+      if (!friendArmyPosition.contains(this.position + 8 + 1))
+        if (enemyArmyPosition.contains(this.position + 8 + 1))
+          possibleAttacks.add(this.position + 8 + 1,);
+
+
+      print("pawn up diagonal left ${this.position + 8-1}");
+      if (!friendArmyPosition.contains(this.position + 8-1))
+        if (enemyArmyPosition.contains(this.position + 8-1))
+          possibleAttacks.add(this.position + 8-1,);
+
     }
+    
+     
     this.possiblePaths=possibleMoves;
-    return possibleMoves;
+    this.possibleAttacks=possibleAttacks;
   }
 }

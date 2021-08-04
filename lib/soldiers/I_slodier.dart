@@ -5,7 +5,9 @@ abstract class ISoldier{
   late int position;
   late int id;
   late List<int> possiblePaths=[];
+  late List<int> possibleAttacks=[];
+
   void move();
   void attack();
-  List<int>checkPath({required String color,required Army whiteArmy, required Army blackArmy});
+  void checkPath({required String color,required Army friend, required Army enemy});
 }

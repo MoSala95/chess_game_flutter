@@ -35,7 +35,13 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     currentArmy = whiteArmy;
+
     super.initState();
+  }
+
+  switchPlayer(){
+    if(currentArmy==whiteArmy) currentArmy=blackArmy;
+    else currentArmy=whiteArmy;
   }
 
   @override
@@ -59,18 +65,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 print(isEven);
                 if(currentArmy.currentSelection!=null)
                 if(currentArmy.currentSelection!.position==index)
-                  return Container(color:Colors.redAccent,child: Text("$index"),);
+                  return Container(color:Colors.greenAccent,);
                 else if(currentArmy.currentSelection!.possiblePaths.contains(index))
-                  return Container(color: Colors.greenAccent,child: Text("$index"),);
+                  return Container(color: Colors.greenAccent,);
+                else if(currentArmy.currentSelection!.possibleAttacks.contains(index))
+                  return Container(color: Colors.redAccent,);
                   else if(isEven%2==0)
-                    return Container(color:index%2==0?Colors.white: Colors.orangeAccent,child: Text("$index"),);
+                    return Container(color:index%2==0?Colors.white: Colors.orangeAccent);
                   else
-                    return Container(color:index%2==0?Colors.orangeAccent: Colors.white,child: Text("$index"),);
+                    return Container(color:index%2==0?Colors.orangeAccent: Colors.white);
                 else
                  if(isEven%2==0)
-                  return Container(color:index%2==0?Colors.white: Colors.orangeAccent,child: Text("$index"),);
+                  return Container(color:index%2==0?Colors.white: Colors.orangeAccent);
                 else
-                  return Container(color:index%2==0?Colors.orangeAccent: Colors.white,child: Text("$index"),);
+                  return Container(color:index%2==0?Colors.orangeAccent: Colors.white);
 
               },),
           ),
@@ -87,12 +95,30 @@ class _MyHomePageState extends State<MyHomePage> {
                   if(item.position==index)
                     return GestureDetector(
                         onTap: () {
-                          currentArmy.currentSelection=item;
-                          currentArmy.currentSelection!.possiblePaths.clear();
-                          currentArmy.currentSelection!.checkPath(color: currentArmy.color, whiteArmy: whiteArmy, blackArmy: blackArmy);
-                          setState(() {
+                          if(currentArmy==whiteArmy){
+                            currentArmy=whiteArmy;
+                            currentArmy.currentSelection=item;
+                            currentArmy.currentSelection!.possiblePaths.clear();
+                            currentArmy.currentSelection!.possibleAttacks.clear();
+                            print('current selection color ${currentArmy.color}');
+                            currentArmy.currentSelection!.checkPath(color: currentArmy.color, friend: whiteArmy, enemy: blackArmy);
+                          }
+                          else if(currentArmy.currentSelection!=null &&currentArmy.currentSelection!.possibleAttacks.contains(index)){
+                            currentArmy.currentSelection!.position=index;
+                            currentArmy.currentSelection!.possiblePaths.clear();
+                            currentArmy.currentSelection!.possibleAttacks.clear();
+                            currentArmy.currentSelection=null;
+                            switchPlayer();
+                            print("possible kill");
+                            currentArmy.allSoldiers.removeWhere((element) {
+                              print("remove element ${element.position} ,, index $index");
 
+                              return element.position==index;
+                            } );
+                          }
+                       setState(() {
                           });
+
                         },
                         child: Container(child: Image.asset(item.imagePath),
                         ));
@@ -101,35 +127,55 @@ class _MyHomePageState extends State<MyHomePage> {
                   if(item.position==index)
                     return GestureDetector(
                         onTap: () {
-                          currentArmy.currentSelection=item;
-                          currentArmy.currentSelection!.possiblePaths.clear();
-                          currentArmy.currentSelection!.checkPath(color: currentArmy.color, whiteArmy: whiteArmy, blackArmy: blackArmy);
+                          if(currentArmy==blackArmy){
+                            currentArmy=blackArmy;
+                            currentArmy.currentSelection=item;
+                            currentArmy.currentSelection!.possiblePaths.clear();
+                            currentArmy.currentSelection!.possibleAttacks.clear();
+                            print('current selection color ${currentArmy.color}');
+                            currentArmy.currentSelection!.checkPath(color: currentArmy.color, friend: blackArmy, enemy: whiteArmy);
 
-                          setState(() {
+                          } else if( currentArmy.currentSelection!=null &&currentArmy.currentSelection!.possibleAttacks.contains(index)){
+                            currentArmy.currentSelection!.position=index;
+                            currentArmy.currentSelection!.possiblePaths.clear();
+                            currentArmy.currentSelection!.possibleAttacks.clear();
+                            currentArmy.currentSelection=null;
+                            switchPlayer();
+                            print("possible kill");
+                            currentArmy.allSoldiers.removeWhere((element) {
+                              print("remove element ${element.position} ,, index $index");
 
+                              return element.position==index;
+                            } );
+                          }
+                        setState(() {
                           });
+
                         },
                         child: Container(child: Image.asset(item.imagePath),
                         ));
 
                 return GestureDetector(
                     onTap: () {
-                      setState(() {
-                        if(currentArmy.currentSelection!=null){
-                          if(currentArmy.currentSelection!.possiblePaths.contains(index)){
-                            currentArmy.currentSelection!.position=index;
-                            currentArmy.currentSelection!.possiblePaths.clear();
-                            currentArmy.currentSelection!.checkPath(color: currentArmy.color, whiteArmy: whiteArmy, blackArmy: blackArmy);
-                          }
 
+                        if(currentArmy.currentSelection!=null){
+                          if(currentArmy.currentSelection!.possiblePaths.contains(index)||currentArmy.currentSelection!.possibleAttacks.contains(index)){
+                              currentArmy.currentSelection!.position=index;
+                              currentArmy.currentSelection!.possiblePaths.clear();
+                              currentArmy.currentSelection!.possibleAttacks.clear();
+                              currentArmy.currentSelection=null;
+                              print("not a kill");
+                              switchPlayer();
+                              setState(() {
+
+                              });
+                            }
                         }
 
-                      });
                     },
                     child: Container(color: Colors.transparent,));
               },),
           ),
-
         ],
       ),
     );

@@ -19,8 +19,9 @@ class Bishop extends ISoldier{
 
   }
   @override
-  List<int> checkPath({required String color,required Army whiteArmy, required Army blackArmy}){
+   checkPath({required String color,required Army friend, required Army enemy}){
    List<int>possibleMoves=[];
+   List<int>possibleAttacks=[];
    int upRows=0;
    int downRows=0;
    int rightCells=0;
@@ -35,24 +36,26 @@ class Bishop extends ISoldier{
    }
    upRows=7-currentRow;
    downRows=currentRow;
-   List<int> whiteArmyPosition=[];
-   List<int> blackArmyPosition=[];
+   List<int> friendArmyPosition=[];
+   List<int> enemyArmyPosition=[];
 
-   whiteArmy.allSoldiers.forEach((element) {whiteArmyPosition.add(element.position); });
-   blackArmy.allSoldiers.forEach((element) {blackArmyPosition.add(element.position); });
+   friend.allSoldiers.forEach((element) {friendArmyPosition.add(element.position); });
+   enemy.allSoldiers.forEach((element) {enemyArmyPosition.add(element.position); });
 
    print("current position $position current row $currentRow up row count $upRows ,, down rows $downRows");
-   if(color=="w") {
+    
      if (downRows > 0&&rightCells>0)
        for (int i = 1; i <= downRows ; i++) {
          if(i>rightCells)
            break;
          print("bishop down right   ${this.position - (8 * i) + i}");
-         if (!whiteArmyPosition.contains(this.position - (8 * i) + i))
-           if (!blackArmyPosition.contains(this.position - (8 * i) + i))
+         if (!friendArmyPosition.contains(this.position - (8 * i) + i))
+           if (!enemyArmyPosition.contains(this.position - (8 * i) + i))
              possibleMoves.add(this.position - (8 * i) + i,);
            else {
-             possibleMoves.add(this.position - (8 * i) + i,);
+
+             possibleAttacks.add(this.position - (8 * i) + i,);
+             
              break;
            }
          else{
@@ -66,11 +69,12 @@ class Bishop extends ISoldier{
          if(i>leftCells)
            break;
          print("bishop down left  ${this.position - (8 * i) - i}");
-         if (!whiteArmyPosition.contains(this.position - (8 * i) - i))
-           if (!blackArmyPosition.contains(this.position - (8 * i) - i))
+         if (!friendArmyPosition.contains(this.position - (8 * i) - i))
+           if (!enemyArmyPosition.contains(this.position - (8 * i) - i))
              possibleMoves.add(this.position - (8 * i) - i,);
            else {
-             possibleMoves.add(this.position - (8 * i) - i,);
+
+             possibleAttacks.add(this.position - (8 * i) - i,);
              break;
            }
          else{
@@ -85,11 +89,12 @@ class Bishop extends ISoldier{
            break;
          print("bishop up rows loop ${this.position + (8 * i) + i}");
 
-         if (!whiteArmyPosition.contains(this.position + (8 * i) + i))
-           if (!blackArmyPosition.contains(this.position + (8 * i) + i))
+         if (!friendArmyPosition.contains(this.position + (8 * i) + i))
+           if (!enemyArmyPosition.contains(this.position + (8 * i) + i))
              possibleMoves.add(this.position + (8 * i) + i,);
            else {
              possibleMoves.add(this.position + (8 * i) + i,);
+             possibleAttacks.add(this.position + (8 * i) + i,);
              break;
            }
          else
@@ -100,90 +105,21 @@ class Bishop extends ISoldier{
          if(i>leftCells)
            break;
          print("bishop up rows loop ${this.position + (8 * i) - i}");
-         if (!whiteArmyPosition.contains(this.position + (8 * i) - i))
-           if (!blackArmyPosition.contains(this.position + (8 * i) - i))
+         if (!friendArmyPosition.contains(this.position + (8 * i) - i))
+           if (!enemyArmyPosition.contains(this.position + (8 * i) - i))
              possibleMoves.add(this.position + (8 * i) - i,);
            else {
-             possibleMoves.add(this.position + (8 * i) - i,);
+
+             possibleAttacks.add(this.position + (8 * i) - i,);
              break;
            }
          else
            break;
        }
 
-   }
-
-   else{
-     if (downRows > 0&&rightCells>0)
-       for (int i = 1; i <= downRows ; i++) {
-         if(i>rightCells)
-           break;
-         print("bishop down right   ${this.position - (8 * i) + i}");
-         if (!blackArmyPosition.contains(this.position - (8 * i) + i))
-           if (!whiteArmyPosition.contains(this.position - (8 * i) + i))
-             possibleMoves.add(this.position - (8 * i) + i,);
-           else {
-             possibleMoves.add(this.position - (8 * i) + i,);
-             break;
-           }
-         else{
-           print("break white loop");
-           break;
-         }
-
-       }
-     if (downRows > 0&&leftCells>0)
-       for (int i = 1; i <= downRows ; i++) {
-         if(i>leftCells)
-           break;
-         print("bishop down left  ${this.position - (8 * i) - i}");
-         if (!blackArmyPosition.contains(this.position - (8 * i) - i))
-           if (!whiteArmyPosition.contains(this.position - (8 * i) - i))
-             possibleMoves.add(this.position - (8 * i) - i,);
-           else {
-             possibleMoves.add(this.position - (8 * i) - i,);
-             break;
-           }
-         else{
-           print("break white loop");
-           break;
-         }
-       }
-
-     if  (upRows > 0&&rightCells>0)
-       for (int i = 1; i <= upRows ; i++) {
-         if(i>rightCells)
-           break;
-         print("bishop up rows loop ${this.position + (8 * i) + i}");
-
-         if (!blackArmyPosition.contains(this.position + (8 * i) + i))
-           if (!whiteArmyPosition.contains(this.position + (8 * i) + i))
-             possibleMoves.add(this.position + (8 * i) + i,);
-           else {
-             possibleMoves.add(this.position + (8 * i) + i,);
-             break;
-           }
-         else
-           break;
-       }
-     if  (upRows > 0&&leftCells>0)
-       for (int i = 1; i <= upRows ; i++) {
-         if(i>leftCells)
-           break;
-           print("bishop up rows loop ${this.position + (8 * i) - i}");
-         if (!blackArmyPosition.contains(this.position + (8 * i) - i))
-           if (!whiteArmyPosition.contains(this.position + (8 * i) - i))
-             possibleMoves.add(this.position + (8 * i) - i,);
-           else {
-             possibleMoves.add(this.position + (8 * i) - i,);
-             break;
-           }
-         else
-           break;
-       }
-   }
    this.possiblePaths=possibleMoves;
-   return possibleMoves;
+   this.possibleAttacks=possibleAttacks;
+    
   }
 
 }

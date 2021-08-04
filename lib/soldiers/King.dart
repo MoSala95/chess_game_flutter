@@ -18,8 +18,9 @@ class King extends ISoldier{
   }
 
   @override
-  List<int> checkPath({required String color,required Army whiteArmy, required Army blackArmy}){
+  checkPath({required String color,required Army friend, required Army enemy}){
     List<int>possibleMoves=[];
+    List<int>possibleAttacks=[];
     int upRows=0;
     int downRows=0;
     int rightCells=0;
@@ -36,22 +37,23 @@ class King extends ISoldier{
     print("right and left cells $rightCells ,,, $leftCells ");
     upRows=7-currentRow;
     downRows=currentRow;
-    List<int> whiteArmyPosition=[];
-    List<int> blackArmyPosition=[];
+    List<int> friendArmyPosition=[];
+    List<int> enemyArmyPosition=[];
 
-    whiteArmy.allSoldiers.forEach((element) {whiteArmyPosition.add(element.position); });
-    blackArmy.allSoldiers.forEach((element) {blackArmyPosition.add(element.position); });
+    friend.allSoldiers.forEach((element) {friendArmyPosition.add(element.position); });
+    enemy.allSoldiers.forEach((element) {enemyArmyPosition.add(element.position); });
 
     print("current position $position current row $currentRow up row count $upRows ,, down rows $downRows");
-    if(color=="w") {
       if(rightCells>0){
         for (int i = 1; i <= 1 ; i++) {
           print("king right ${this.position + i }");
-          if (!whiteArmyPosition.contains(this.position + i ))
-            if (!blackArmyPosition.contains(this.position +  i ))
+          if (!friendArmyPosition.contains(this.position + i ))
+            if (!enemyArmyPosition.contains(this.position +  i ))
               possibleMoves.add(this.position +  i );
             else {
-              possibleMoves.add(this.position +  i );
+
+              possibleAttacks.add(this.position +  i );
+
               break;
             }
           else{
@@ -64,11 +66,12 @@ class King extends ISoldier{
       if(leftCells>0){
         for (int i = 1; i <= 1 ; i++) {
           print("king left  ${this.position - i }");
-          if (!whiteArmyPosition.contains(this.position - i ))
-            if (!blackArmyPosition.contains(this.position -  i ))
+          if (!friendArmyPosition.contains(this.position - i ))
+            if (!enemyArmyPosition.contains(this.position -  i ))
               possibleMoves.add(this.position -  i );
             else {
-              possibleMoves.add(this.position -  i );
+
+              possibleAttacks.add(this.position -  i );
               break;
             }
           else{
@@ -81,11 +84,12 @@ class King extends ISoldier{
       if (downRows > 0) {
         for (int i = 1; i <= 1 ; i++) {
           print("king down vertical  ${this.position - (8 * i) }");
-          if (!whiteArmyPosition.contains(this.position - (8 * i) ))
-            if (!blackArmyPosition.contains(this.position - (8 * i) ))
+          if (!friendArmyPosition.contains(this.position - (8 * i) ))
+            if (!enemyArmyPosition.contains(this.position - (8 * i) ))
               possibleMoves.add(this.position - (8 * i) );
             else {
-              possibleMoves.add(this.position - (8 * i) );
+
+              possibleAttacks.add(this.position - (8 * i)  );
               break;
             }
           else{
@@ -96,11 +100,12 @@ class King extends ISoldier{
         }
         for (int i = 1; i <= 1 ; i++) {
           print("king down diagonal right ${this.position - (8 * i) + i}");
-          if (!whiteArmyPosition.contains(this.position - (8 * i) + i))
-            if (!blackArmyPosition.contains(this.position - (8 * i) + i))
+          if (!friendArmyPosition.contains(this.position - (8 * i) + i))
+            if (!enemyArmyPosition.contains(this.position - (8 * i) + i))
               possibleMoves.add(this.position - (8 * i) + i,);
             else {
-              possibleMoves.add(this.position - (8 * i) + i,);
+
+              possibleAttacks.add(this.position - (8 * i) +i );
               break;
             }
           else{
@@ -111,11 +116,12 @@ class King extends ISoldier{
         }
         for (int i = 1; i <= 1 ; i++) {
           print("king down diagonal left ${this.position - (8 * i) - i}");
-          if (!whiteArmyPosition.contains(this.position - (8 * i) - i))
-            if (!blackArmyPosition.contains(this.position - (8 * i) - i))
+          if (!friendArmyPosition.contains(this.position - (8 * i) - i))
+            if (!enemyArmyPosition.contains(this.position - (8 * i) - i))
               possibleMoves.add(this.position - (8 * i) - i,);
             else {
-              possibleMoves.add(this.position - (8 * i) - i,);
+
+              possibleAttacks.add(this.position - (8 * i) -i );
               break;
             }
           else{
@@ -131,11 +137,12 @@ class King extends ISoldier{
         for (int i = 1; i <= 1 ; i++) {
           print("king up vertical ${this.position + (8 * i) }");
 
-          if (!whiteArmyPosition.contains(this.position + (8 * i) ))
-            if (!blackArmyPosition.contains(this.position + (8 * i) ))
+          if (!friendArmyPosition.contains(this.position + (8 * i) ))
+            if (!enemyArmyPosition.contains(this.position + (8 * i) ))
               possibleMoves.add(this.position + (8 * i) );
             else {
-              possibleMoves.add(this.position + (8 * i) );
+
+              possibleAttacks.add(this.position + (8 * i) );
               break;
             }
           else
@@ -144,11 +151,12 @@ class King extends ISoldier{
         for (int i = 1; i <= 1 ; i++) {
           print("king down diagonal right ${this.position + (8 * i) + i}");
 
-          if (!whiteArmyPosition.contains(this.position + (8 * i) + i))
-            if (!blackArmyPosition.contains(this.position + (8 * i) + i))
+          if (!friendArmyPosition.contains(this.position + (8 * i) + i))
+            if (!enemyArmyPosition.contains(this.position + (8 * i) + i))
               possibleMoves.add(this.position + (8 * i) + i,);
             else {
-              possibleMoves.add(this.position + (8 * i) + i,);
+
+              possibleAttacks.add(this.position + (8 * i)+i );
               break;
             }
           else
@@ -156,84 +164,12 @@ class King extends ISoldier{
         }
         for (int i = 1; i <= 1 ; i++) {
           print("king down diagonal left ${this.position + (8 * i) - i}");
-          if (!whiteArmyPosition.contains(this.position + (8 * i) - i))
-            if (!blackArmyPosition.contains(this.position + (8 * i) - i))
+          if (!friendArmyPosition.contains(this.position + (8 * i) - i))
+            if (!enemyArmyPosition.contains(this.position + (8 * i) - i))
               possibleMoves.add(this.position + (8 * i) - i,);
             else {
-              possibleMoves.add(this.position + (8 * i) - i,);
-              break;
-            }
-          else
-            break;
-        }
-      }
-    }else{
-      if(rightCells>0){
-        for (int i = 1; i <= 1 ; i++) {
-          print("king right  ${this.position + i }");
-          if (!blackArmyPosition.contains(this.position + i ))
-            if (!whiteArmyPosition.contains(this.position +  i ))
-              possibleMoves.add(this.position +  i );
-            else {
-              possibleMoves.add(this.position +  i );
-              break;
-            }
-          else{
-            print("break white loop");
-            break;
-          }
 
-        }
-      }
-      if(leftCells>0){
-        for (int i = 1; i <= 1 ; i++) {
-          print("king left  ${this.position - i }");
-          if (!blackArmyPosition.contains(this.position - i ))
-            if (!whiteArmyPosition.contains(this.position -  i ))
-              possibleMoves.add(this.position -  i );
-            else {
-              possibleMoves.add(this.position -  i );
-              break;
-            }
-          else{
-            print("break white loop");
-            break;
-          }
-
-        }
-      }
-      if (downRows > 0) {
-        for (int i = 1; i <= 1 ; i++) {
-          print("king vertical down ${this.position - (8 * i) }");
-          if (!blackArmyPosition.contains(this.position - (8 * i) ))
-            if (!whiteArmyPosition.contains(this.position - (8 * i) ))
-              possibleMoves.add(this.position - (8 * i) + i,);
-            else {
-              possibleMoves.add(this.position - (8 * i) + i,);
-              break;
-            }
-          else
-            break;
-        }
-        for (int i = 1; i <= 1 ; i++) {
-          print("king down rows loop ${this.position - (8 * i) + i}");
-          if (!blackArmyPosition.contains(this.position - (8 * i) + i))
-            if (!whiteArmyPosition.contains(this.position - (8 * i) + i))
-              possibleMoves.add(this.position - (8 * i) + i,);
-            else {
-              possibleMoves.add(this.position - (8 * i) + i,);
-              break;
-            }
-          else
-            break;
-        }
-        for (int i = 1; i <= 1 ; i++) {
-          print("king down rows loop ${this.position - (8 * i) - i}");
-          if (!blackArmyPosition.contains(this.position - (8 * i) - i))
-            if (!whiteArmyPosition.contains(this.position - (8 * i) - i))
-              possibleMoves.add(this.position - (8 * i) - i,);
-            else {
-              possibleMoves.add(this.position - (8 * i) - i,);
+              possibleAttacks.add(this.position + (8 * i) -i);
               break;
             }
           else
@@ -241,49 +177,9 @@ class King extends ISoldier{
         }
       }
 
-
-      if (upRows > 0) {
-        for (int i = 1; i <= 1 ; i++) {
-          print("king vertical up ${this.position + (8 * i) }");
-          if (!blackArmyPosition.contains(this.position + (8 * i) ))
-            if (!whiteArmyPosition.contains(this.position + (8 * i) ))
-              possibleMoves.add(this.position + (8 * i) + i,);
-            else {
-              possibleMoves.add(this.position + (8 * i) + i,);
-              break;
-            }
-          else
-            break;
-        }
-        for (int i = 1; i <= 1 ; i++) {
-          print("king up rows loop ${this.position + (8 * i) + i}");
-          if (!blackArmyPosition.contains(this.position + (8 * i) + i))
-            if (!whiteArmyPosition.contains(this.position + (8 * i) + i))
-              possibleMoves.add(this.position + (8 * i) + i,);
-            else {
-              possibleMoves.add(this.position + (8 * i) + i,);
-              break;
-            }
-          else
-            break;
-        }
-        for (int i = 1; i <= 1 ; i++) {
-          print("king up rows loop ${this.position + (8 * i) - i}");
-
-          if (!blackArmyPosition.contains(this.position + (8 * i) - i))
-            if (!whiteArmyPosition.contains(this.position + (8 * i) - i))
-              possibleMoves.add(this.position + (8 * i) - i,);
-            else {
-              possibleMoves.add(this.position + (8 * i) - i,);
-              break;
-            }
-          else
-            break;
-        }
-      }
-    }
+    
     this.possiblePaths=possibleMoves;
-    return possibleMoves;
+    this.possibleAttacks=possibleAttacks;
   }
 
 }
